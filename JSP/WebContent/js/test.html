@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>                                                                                                                        
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script>
+function test(btnObj){
+
+	alert(btnObj.value);
+
+/*	var idObj = document.getElementById("id");
+	alert(idObj.value);
+
+	var pwdObj = document.getElementById("pwd");
+	alert(pwdObj.value);
+
+	var ageObj = document.getElementById("age");
+	alert(ageObj.value);
+
+	var nameObj = document.getElementById("name");
+	alert(nemaObj.value);*/
+
+}
+
+var TestObj = function(){
+	this.a=3;
+	this.b=4;
+	var c = 10;
+	this.alertStr = function(str){
+		alert(c);
+	}
+}
+
+</script>
+<body>
+<input type="text" name="id" id="id" value="테스트"><br>
+<input type="text" name="pwd" id="pwd"><br>
+<input type="text" name="age" id="age"><br>
+<input type="text" name="name" id="name"><br>
+<input type="button" value="테스트" onclick="test(this)"><br>
+
+
+</body>
+</html>

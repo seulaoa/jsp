@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>회원가입</title>
+</head>
+<body>
+ <form action = "signin.jsp" method="post">
+ 
+ <table border="1">
+ 	<tr>
+ 		<td colspan="2">회원가입</td>
+ 	</tr>
+ 	<tr>
+ 		<td>아이디</td>
+ 		<td><input type="text"name="id"id="id"value="red"/></td> 
+ 		<!-- ID는 jsp에서 찾기 위해서, name은  value는 값 지정해주면 red가 나와-->
+ 	</tr>
+ 	<tr>
+ 		<td>비밀번호</td>
+ 		<td><input type="password"name="pwd"id="pwd"/></td>
+ 	</tr>
+ 	<tr>
+ 		<td>이름</td>
+ 		<td><input type="text"name="name"id="name"/></td>
+ 	</tr>
+ 	
+ 	
+ 	<tr>
+		<td> 취미</td>
+		<td>
+		<input type ="checkbox" value = "잠자기" name="hobby"> 잠자기 <br>
+		<input type ="checkbox" value = "독서" name="hobby"> 독서 <br>
+		<input type ="checkbox" value = "영화보기" name="hobby"> 영화보기 <br>
+		<input type ="checkbox" value = "음악감상" name="hobby"> 음악감상 <br>
+		</td>
+ 	</tr>
+ 	
+ 	<tr>
+ 		<td colspan="2"> <!-- 열 병합 2개 -->
+ 		<input type="button"value="회원가입"onclick="signin()"></td> <!-- on은 무조건 이벤트 / 함수대입 -->
+		 
+ 	</tr>
+ 	
+ </table>
+ </form>
+
+<script>
+<!-- var a = 1; -->
+function signin() 
+<!-- signin(a,b) 데이터 타입을 선언할 수 없기때문에 a,b안에 모든 값이 들어올 수 잇음 / 오버로딩이라는 개념이 없어서 a,b가 없어도,이상해도 출력됨. --> 
+{
+	var idObj = document.getElementById("id"); <!-- 전체 문서중에 ID가 id인 아이디를 가져요 -->
+	var pwdObj = document.getElementById("pwd");
+	var nameObj = document.getElementById("name");
+	
+	if(idObj.value==""){
+		alert("아이디를 입력해주세요~~~!!!!");
+		idObj.focus();
+		return;
+	}
+	if(pwdObj.value==""){
+		alert("비밀번호를 입력해주세요~~~!!!!");
+		pwdObj.focus();
+		return;
+	}
+	if(nameObj.value==""){
+		alert("이름을 입력해주세요~~~!!!!");
+		nameObj.focus();
+		return;
+	}
+	location.href="signin.jsp?id="+idObj.value + "&pwd=" + pwdObj.value + "&name=" + nameObj.value; //form action과 같은 역할
+		
+}
+</script>
+
+</body>
+</html>
