@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.google.gson.Gson;
+
 import common.DBCon;
 import service.UserService;
 import service.UserServiceImpl;
@@ -53,6 +55,7 @@ public class UserServlet extends HttpServlet {
 		
 		
 		if (command.equals("login")) {
+			
 			String id = request.getParameter("id");
 			String pwd = request.getParameter("pwd");
 			Map<String, String> hm = us.getUserLogin(id, pwd);
@@ -68,33 +71,24 @@ public class UserServlet extends HttpServlet {
 			
 			
 		} else if (command.equals("signin")) {
-			String id = request.getParameter("id"); //name이 id
-			String pwd = request.getParameter("pwd");
-			String name = request.getParameter("name");
-			String[] hobbies = request.getParameterValues("hobby");
-			String hobby = "";
-			for (String h : hobbies) {
-				hobby += h + ",";
-			}
-			hobby = hobby.substring(0, hobby.length()-1); //substring함수 사용, hobby의 맘지막 값을 빼겠다는 말 = ,를 빼겠다.
+
+			String str = request.getParameter("param");
+			Gson g = new Gson();
+			HashMap<String,String> hm = g.fromJson(str, HashMap.class);
 			
-			Map<String,String> hm = new HashMap<String, String>();
-			hm.put("id", id);
-			hm.put("pwd", pwd);
-			hm.put("name", name);
-			hm.put("hobby", hobby);
-			
-			
-			String result; 
 			result = "회원가입에 실패하셨습다";
-			result += "location.href='/signin.jsp'";
+			
 			int rCnt = us.insertUser(hm); //insertUser함수 호출
 			if(rCnt == 1){
-				result = "<script>";
-				result+="alert('회원가입에 성공하셨습니다. 로그인 ㄱ.');";
-				result+="location.href='/login.jsp'";
-				result+="</script>";
+				result ="회원가입에 성공하셨습니다.";
+				result += "다시로그인 ㄱ";
+
 			}
+			HashMap<String,String> rHm = new HashMap<String, String>();
+			rHm.put("msg", result);
+			rHm.put("url", "/login.jsp");
+			
+			result = g.toJson(rHm);
 			doProcess(response, result);
 
 		}else if(command.equals("logout")) {
@@ -142,19 +136,15 @@ public class UserServlet extends HttpServlet {
 		}		
 
 		else if (command.equals("delete")) {
-
+			String userNo = request.getParameter("userNo");
 			Map<String,String> hm = new HashMap<String, String>();
-			HttpSession session = request.getSession();
-			Map<String, String> user = (Map) session.getAttribute("user");
-			hm.put("user_no", user.get("user_no"));
+			hm.put("user_no", userNo);
 			int rCnt = us.deleteUser(hm);
 
 			String result; 
 			result = "회원탈퇴에 실패하셨습니다";
-		
 			
 			if(rCnt == 1){
-				session.invalidate();
 				result = "<script>";
 				result+="alert('회원 탈퇴에 성공하셨습니다.');";
 				result+="location.href='/login.jsp'";
@@ -175,16 +165,23 @@ public class UserServlet extends HttpServlet {
 				result += "<td>" + m.get("id")+"</td>";
 				result += "<td>" + m.get("name")+"</td>";
 				result += "<td>" + m.get("hobby")+"</td>";
-				result += "<td><input type = 'button' value='수정'></td>";
-				result += "<td><input type = 'button' value='삭제'></td>";
+				result += "<td><input type = 'button' value='수정' data-num ='" + m.get("user_no") +"'></td>";
+				result += "<td><input type = 'button' value='삭제' data-num ='" + m.get("user_no") +"'></td>";
 				result += "</tr>";
 				
 			}
 			result +="</table>";
 			doProcess(response,result);
 					
+		}else if(command.equals("view"))
+		{
+			String userNo = request.getParameter("userNo");
+			Map<String, String> hm = us.selectUser(userNo); //쿼리로 데이터 받아서 해쉬ㅁㅂ에 널기
+
+			Gson g = new Gson();
+			String result = g.toJson(hm);
+			doProcess(response, result); //{key:value, key:value, ...} 이 형태로  result호 보내
 		}
-		
 	}
 
 	

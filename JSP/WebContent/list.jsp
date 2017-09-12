@@ -26,16 +26,9 @@ var AjaxUtil = function(params){
 	this.xhr.onreadystatechange=function(){
    		if (this.readyState==4){ // 서버가 요청을 잘 받았고 complet잘 되었어.
    			if(this.status==200){ //성공했을 때만 동작해라. // 200번대 아니면 다 에러
-	   			var result = decodeURIComponent(this.responseText);
-	   			$("#result_div").html(result); // #-> '아이디'가 ~인 것을 찾아서
-	   			$("input[type='button']").click(function(){ //input으로 시작하는 태그는 모조리 -> 타입이 버튼인 것만 이벤트 
-	   				var url = this.getAttribute("data-url");
-	   				if(url.split(".")[1]=="user"){
-	   					var param = "?command=list&name="+$("#name").val();
-	   					var au = new AjaxUtil(param);
-	   					au.send();
-	   				}
-	   			});
+	   			var result = decodeURIComponent(this.responseText); //table을 그대로 가져와서 result에 담아줭
+	   			$("#result_div").html(result); // #-> '아이디'가 result_div인 것을 찾아서
+	   			setEvent();
    			}
    		}
 	}
@@ -49,7 +42,36 @@ var AjaxUtil = function(params){
    	}
 }
 
-$(document).ready(function(){ //업로드. 다 읽은다음에 실행하라고!
+
+
+function setEvent(){
+	$("input[type='button']").click(function(){
+		var url = this.getAttribute("data-url");
+		if(url){
+			if(url.split(".")[1]=="user"){
+				var param = "?command=list&name="+$("#name").val();
+				var au = new AjaxUtil(param);
+				au.send();
+				
+			}
+		}else{
+			var userNo = this.getAttribute("data-num"); 
+			if(this.getAttribute("value")=="수정"){
+				location.href="/modify.jsp?userNo=" +userNo;
+			}else if(this.getAttribute("value")=="삭제"){
+				var param = "?command=delete&userNo="+userNo;
+				var au = new AjaxUtil(param);
+				au.send();
+				
+			}
+		}
+		
+		
+	});
+	
+}
+
+$(document).ready(function(){
 	var param = "?command=list";
 	var au = new AjaxUtil(param);
 	au.send();

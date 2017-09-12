@@ -4,7 +4,6 @@
 <body>
 <jsp:include page="/common/left.jsp"/> 
 로그인 화면
-<%=commonStr %>
 
 </body>
 </html>

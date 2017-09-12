@@ -1,16 +1,7 @@
 <%@ page import = "java.util.Map"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-
     pageEncoding="UTF-8"%>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-
-<html>
-
-<head>
-
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<%@ include file = "/common/header.jsp" %>
 <title>Insert title here</title>
 
 </head>
@@ -18,13 +9,29 @@
 <body>
 
 <%
-if(session.getAttribute("user") == null){
-	RequestDispatcher dis = request.getRequestDispatcher("/login.jsp");
-	dis.forward(request, response);
-}
-
-Map<String,String> user = (Map) session.getAttribute("user");
+String userNo = request.getParameter("userNo");
 %>
+
+<script>
+function callback(result){ //{key:value, key:value, ...} 이 형태로  result 받아와
+	$("#id").val(result.id); //result id값을 id에 넣어줘
+	$("#name").val(result.name);
+	var hobbies = result.hobby.split(","); //split
+	
+	for(var i =0, max=hobbies.length;i<max;i++){
+		$("input[value='" + hobbies[i]+"']").prop("checked",true); 
+	}
+	
+
+}
+$(document).ready(function(){ 
+	var param = "?command=view&userNo=<%=userNo%>";
+	param = encodeURI(param);
+	var au = new AjaxUtil(param); // 서버갔다와서
+	au.changeCallBack(callback); // callback함수로 가
+	au.send(); //서버가 실행되고 userservlet ㄱㄱ
+})
+</script>
 
 <form action="sigin.user" method="post">
 
@@ -40,7 +47,7 @@ Map<String,String> user = (Map) session.getAttribute("user");
 
 	<td align="center">아이디</td>
 
-	<td><input type="text" name="id" id="id" value="<%=user.get("id") %>" /></td>
+	<td><input type="text" name="id" id="id" " /></td>
 
 </tr>
 
@@ -56,7 +63,7 @@ Map<String,String> user = (Map) session.getAttribute("user");
 
 	<td align="center">이름</td>
 
-	<td><input type="text" name="name" id="name" maxlength="100" value="<%=user.get("name") %>"/></td>
+	<td><input type="text" name="name" id="name" maxlength="100""/></td>
 
 <tr>
 
@@ -66,13 +73,13 @@ Map<String,String> user = (Map) session.getAttribute("user");
 
 	<td>
 
-		잠자기<input type="checkbox" name="hobby" value="잠자기" <%=user.get("hobby").indexOf("잠자기")!=-1?"checked":"" %>>
+		잠자기<input type="checkbox" name="hobby" value="잠자기" >
 
-		게임<input type="checkbox" name="hobby" value="게임" <%=user.get("hobby").indexOf("게임")!=-1?"checked":"" %>>
+		게임<input type="checkbox" name="hobby" value="게임" >
 
-		독서<input type="checkbox" name="hobby" value="독서" <%=user.get("hobby").indexOf("독서")!=-1?"checked":"" %>>
+		독서<input type="checkbox" name="hobby" value="독서" >
 
-		음악<input type="checkbox" name="hobby" value="음악" <%=user.get("hobby").indexOf("음악")!=-1?"checked":"" %>>
+		음악<input type="checkbox" name="hobby" value="음악">
 
 	</td>
 

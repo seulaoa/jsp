@@ -1,17 +1,16 @@
 package servlet;
 
+import java.util.HashMap;
+
+import com.google.gson.Gson;
+
 public class Exam {
-	String str;
 	
 	public static void main(String[] args) {
-		 Exam e = new Exam();
-		
-		 System.out.println(e.str);
-		 try {
-			 System.out.println(e.str.toUpperCase());
-		 } catch(Exception e1){
-			 System.out.println("에러가 났어요.");
-		 }
+		String str = "{\"key1\":\"value1\", \"key2\":\"value2\"}";
+		Gson g = new Gson();
+		HashMap<String,String> hm = g.fromJson(str, HashMap.class);
+		System.out.println(hm);
 		 
 	}
 }

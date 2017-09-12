@@ -5,6 +5,8 @@ import java.util.Map;
 
 public interface UserService {
 	Map<String, String> getUserLogin(String id, String pwd);
+
+	Map<String, String> selectUser(String userNo);
 	
 	int insertUser(Map<String, String>hm);
 	int updateUser(Map<String, String>hm);
